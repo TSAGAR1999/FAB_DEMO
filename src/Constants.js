@@ -10,7 +10,10 @@ export const SchemaId = {
   MasterSchema: "68a5c4fd4e7cc90774f5dafb",
   FinalDecisionLog :"689b1ed4e9c2d3295698807d",
   CustomerProfileother:"68b05d844e7cc90774f5db85",
-  AgentConsole:"68b59458449b0c059a42ade8"
+  AgentConsole:"68b80bb9449b0c059a42ae35",
+  ComplianceCheckReport:"6899f04ee9c2d32956987b9f",
+  DocumentBundle:"6899ef64e9c2d32956987b9e",
+  creditRiskScore:"689adc47e9c2d32956987fbb"
 }
 
 export const teams = [
@@ -842,14 +845,15 @@ export const adhocQuerys = {
 
 export const tableQueries = {
   "newApplication": "SELECT t1.*, t2.customer_id, t2.full_name FROM t_6899ed16e9c2d32956987b9c_t AS t1 JOIN t_6899eeb2e9c2d32956987b9d_t AS t2 ON t1.application_id = t2.application_id ;",
-  "applicationStatus": "SELECT t1.customer_id, t1.full_name, t2.assigned_ops_team, t3.documents_submitted, t3.verification_status FROM t_6899eeb2e9c2d32956987b9d_t AS t1 JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id JOIN t_6899ef64e9c2d32956987b9e_t AS t3 ON t1.application_id = t3.application_id;",
-  "KYCRiskScreening": "SELECT t1.application_id, t1.nationality, t2.assigned_ops_team, t2.account_type, t4.risk_level, t4.checked_by, t4.review_notes, t1.customer_id, t1.full_name, t2.kyc_status FROM t_6899eeb2e9c2d32956987b9d_t AS t1 JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id JOIN t_6899f04ee9c2d32956987b9f_t AS t4 ON t1.application_id = t4.application_id;",
-  "complianceCheck":"SELECT * FROM t_6899eeb2e9c2d32956987b9d_t a JOIN t_6899f04ee9c2d32956987b9f_t b ON a.application_id = b.application_id;"
+  "applicationStatus": "SELECT t1.customer_id, t1.full_name, t2.assigned_ops_team, t3.documents_submitted, t3.verification_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899ef64e9c2d32956987b9e_t AS t3 ON t1.application_id = t3.application_id ORDER BY t1.created_at + 0 DESC;",
+  "KYCRiskScreening": "SELECT t1.application_id, t1.nationality, t2.assigned_ops_team, t2.account_type, t4.risk_level, t4.checked_by, t4.review_notes, t1.customer_id, t1.full_name, t2.kyc_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899f04ee9c2d32956987b9f_t AS t4 ON t1.application_id = t4.application_id ORDER BY t1.created_at + 0 DESC;",
+  "complianceCheck":"SELECT a.*, b.*, FROM_UNIXTIME(a.created_at / 1000) AS created_at_readable FROM t_6899eeb2e9c2d32956987b9d_t a left JOIN t_6899f04ee9c2d32956987b9f_t b ON a.application_id = b.application_id ORDER BY a.created_at + 0 DESC;"
 }
 
 export const agentIds = {
   "fileRead":"0198e4f4-8bbe-7bdb-8040-864e31efe299",
   "complianceAgent":"a6491dea-d201-447d-825c-4eb7be73a692",
   "mainAgent":"38191ed6-3a48-4bc9-a2d8-153fbf2d32a1",
-  "kycAgent":"5ebd931d-83b4-459e-8e0c-edba096bc487"
+  "kycAgent":"5ebd931d-83b4-459e-8e0c-edba096bc487",
+  "extractionAgent":"804990f4-e9b8-419f-9a37-2abdc9e4fd72"
 };

@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
-import { Upload, FileText, Clock, AlertTriangle, User, Building2, Phone, Eye, MoreHorizontal, X, Award, Crosshair, Target, TrendingUp, TrendingDown } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import RoleGuard from '../components/RoleGuard';
-import AIIcon from '../components/AIIcon';
-import { usePostNewApplication } from '../API/query';
-import { adhocQuerys, SchemaId, tableQueries } from '../Constants';
-import { useNavigate } from 'react-router-dom';
-import { useKPIQueries } from '../API/BqsQuery';
-import KPISkeleton from './KPISkeleton';
-import { postGetKPIData } from '../API/BqsApi';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from "react";
+import {
+  Upload,
+  FileText,
+  Clock,
+  AlertTriangle,
+  User,
+  Building2,
+  Phone,
+  Eye,
+  MoreHorizontal,
+  X,
+  Award,
+  Crosshair,
+  Target,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import RoleGuard from "../components/RoleGuard";
+import AIIcon from "../components/AIIcon";
+import { usePostNewApplication } from "../API/query";
+import { adhocQuerys, SchemaId, tableQueries } from "../Constants";
+import { useNavigate } from "react-router-dom";
+import { useKPIQueries } from "../API/BqsQuery";
+import KPISkeleton from "./KPISkeleton";
+import { postGetKPIData } from "../API/BqsApi";
+import { useQuery } from "@tanstack/react-query";
 
 const NewApplication = () => {
   const { hasPermission } = useAuth();
@@ -22,100 +38,100 @@ const NewApplication = () => {
   const navigate = useNavigate();
 
   const sample = {
-    "branch_code": "BR-001",
-    "account_type": "Savings",
-    "PI_314_CREATIONTIMEMS": 1755144860039,
-    "assigned_ops_team": "Team A",
-    "PI_314_TENANTID": "2cf76e5f-26ad-4f2c-bccc-f4bc1e7bfb64",
-    "application_status": "In Progress",
-    "PI_314_TRANSACTIONID": "c6652e46-9c67-48b2-ba42-d58ae6c65ef7",
-    "PI_314_UPDATIONTIMEMS": null,
-    "application_id": "APP-001",
-    "PI_314_ENTITYID": "c03d4c44-16ba-458f-8017-7e468c6c1ed7",
-    "submission_date": "1735689600000",
-    "sla_due_date": "1735776000000",
-    "kyc_status": null,
-    "customer_id": "8a7c6b5e-4d3f-2a1b-0c9d-8e7f6a5b4c3d",
-    "full_name": "New Customer A"
-  }
+    branch_code: "BR-001",
+    account_type: "Savings",
+    PI_314_CREATIONTIMEMS: 1755144860039,
+    assigned_ops_team: "Team A",
+    PI_314_TENANTID: "2cf76e5f-26ad-4f2c-bccc-f4bc1e7bfb64",
+    application_status: "In Progress",
+    PI_314_TRANSACTIONID: "c6652e46-9c67-48b2-ba42-d58ae6c65ef7",
+    PI_314_UPDATIONTIMEMS: null,
+    application_id: "APP-001",
+    PI_314_ENTITYID: "c03d4c44-16ba-458f-8017-7e468c6c1ed7",
+    submission_date: "1735689600000",
+    sla_due_date: "1735776000000",
+    kyc_status: null,
+    customer_id: "8a7c6b5e-4d3f-2a1b-0c9d-8e7f6a5b4c3d",
+    full_name: "New Customer A",
+  };
 
   const kpis = [
     {
-      id: 'new-apps',
-      title: 'Total New Applications',
+      id: "new-apps",
+      title: "Total New Applications",
       value: 47,
-      unit: '',
+      unit: "",
       icon: FileText,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
-      target: 50,                  // higher is better
-      direction: 'higher',         // used to compute progress
-      progressPct: 94,             // (value/target)*100, capped at 100
-      status: 'On Track',
-      progressColor: 'bg-blue-600',
-      description: 'Daily intake of new applications approaching target.',
-      trend: { delta: '+7%', period: 'WoW', direction: 'up' },
-      tooltip: 'Goal: 50 new applications today'
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      target: 50, // higher is better
+      direction: "higher", // used to compute progress
+      progressPct: 94, // (value/target)*100, capped at 100
+      status: "On Track",
+      progressColor: "bg-blue-600",
+      description: "Daily intake of new applications approaching target.",
+      trend: { delta: "+7%", period: "WoW", direction: "up" },
+      tooltip: "Goal: 50 new applications today",
     },
     {
-      id: 'sla-breaches',
-      title: 'SLA Breach Count',
+      id: "sla-breaches",
+      title: "SLA Breach Count",
       value: 3,
-      unit: '',
+      unit: "",
       icon: AlertTriangle,
-      color: 'text-orange-600',
-      bg: 'bg-orange-50',
-      target: 2,                   // lower is better
-      direction: 'lower',
+      color: "text-orange-600",
+      bg: "bg-orange-50",
+      target: 2, // lower is better
+      direction: "lower",
       progressPct: Math.min(100, Math.round((2 / 3) * 100)), // ≈ 67%
-      status: 'At Risk',           // current > target
-      progressColor: 'bg-orange-600',
-      description: 'Number of cases that exceeded the committed SLA window.',
-      trend: { delta: '-1', period: 'DoD', direction: 'down' }, // fewer breaches than yesterday
-      tooltip: 'Keep breaches at 2 or fewer per day'
+      status: "At Risk", // current > target
+      progressColor: "bg-orange-600",
+      description: "Number of cases that exceeded the committed SLA window.",
+      trend: { delta: "-1", period: "DoD", direction: "down" }, // fewer breaches than yesterday
+      tooltip: "Keep breaches at 2 or fewer per day",
     },
     {
-      id: 'intake-time',
-      title: 'Avg Intake Time',
+      id: "intake-time",
+      title: "Avg Intake Time",
       value: 4.2,
-      unit: 'min',
+      unit: "min",
       icon: Clock,
-      color: 'text-green-600',
-      bg: 'bg-green-50',
-      target: 3.5,                 // lower is better
-      direction: 'lower',
+      color: "text-green-600",
+      bg: "bg-green-50",
+      target: 3.5, // lower is better
+      direction: "lower",
       progressPct: Math.min(100, Math.round((3.5 / 4.2) * 100)), // ≈ 83%
-      status: 'Behind',            // current > target
-      progressColor: 'bg-green-600',
-      description: 'Average time from submission to intake completion.',
-      trend: { delta: '-0.3 min', period: 'WoW', direction: 'down' }, // improving
-      tooltip: 'Aim to reach ≤ 3.5 min average intake time'
+      status: "Behind", // current > target
+      progressColor: "bg-green-600",
+      description: "Average time from submission to intake completion.",
+      trend: { delta: "-0.3 min", period: "WoW", direction: "down" }, // improving
+      tooltip: "Aim to reach ≤ 3.5 min average intake time",
     },
     {
-      id: 'escalations',
-      title: 'Applications Escalated',
+      id: "escalations",
+      title: "Applications Escalated",
       value: 12,
-      unit: '',
+      unit: "",
       icon: User,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
-      target: 8,                   // lower is better
-      direction: 'lower',
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+      target: 8, // lower is better
+      direction: "lower",
       progressPct: Math.min(100, Math.round((8 / 12) * 100)), // ≈ 67%
-      status: 'At Risk',           // current > target
-      progressColor: 'bg-purple-600',
-      description: 'Cases requiring elevated attention or approvals.',
-      trend: { delta: '+2', period: 'DoD', direction: 'up' }, // more than yesterday
-      tooltip: 'Keep escalations at or below 8 per day'
-    }
+      status: "At Risk", // current > target
+      progressColor: "bg-purple-600",
+      description: "Cases requiring elevated attention or approvals.",
+      trend: { delta: "+2", period: "DoD", direction: "up" }, // more than yesterday
+      tooltip: "Keep escalations at or below 8 per day",
+    },
   ];
-
 
   const aiSuggestions = [
     {
-      type: 'Auto-Assign',
-      message: 'Recommend assigning FAB-2025-001247 to specialist with Emirates ID expertise',
-      confidence: '92%'
+      type: "Auto-Assign",
+      message:
+        "Recommend assigning FAB-2025-001247 to specialist with Emirates ID expertise",
+      confidence: "92%",
     },
     // {
     //   type: 'Escalate',
@@ -134,7 +150,8 @@ const NewApplication = () => {
     {
       id: 1,
       objective: "Achieve 4-Minute Average Application Intake Time",
-      description: "Streamline new application processing to improve customer experience and operational efficiency",
+      description:
+        "Streamline new application processing to improve customer experience and operational efficiency",
       owner: "Intake Processing Team",
       quarter: "Q1 2025",
       progress: 95,
@@ -147,7 +164,7 @@ const NewApplication = () => {
           target: 4.0,
           unit: "min",
           progress: 95,
-          status: "On Track"
+          status: "On Track",
         },
         {
           kr: "Achieve 95% automated document validation",
@@ -155,7 +172,7 @@ const NewApplication = () => {
           target: 95,
           unit: "%",
           progress: 94,
-          status: "On Track"
+          status: "On Track",
         },
         {
           kr: "Maintain under 5 SLA breaches per day",
@@ -163,14 +180,15 @@ const NewApplication = () => {
           target: 5,
           unit: "breaches",
           progress: 140,
-          status: "Ahead"
-        }
-      ]
+          status: "Ahead",
+        },
+      ],
     },
     {
       id: 2,
       objective: "Optimize Application Queue Management",
-      description: "Improve application routing and assignment to reduce processing bottlenecks",
+      description:
+        "Improve application routing and assignment to reduce processing bottlenecks",
       owner: "Queue Management Team",
       quarter: "Q1 2025",
       progress: 78,
@@ -183,7 +201,7 @@ const NewApplication = () => {
           target: 2.0,
           unit: "hours",
           progress: 80,
-          status: "At Risk"
+          status: "At Risk",
         },
         {
           kr: "Achieve 90% optimal officer assignment",
@@ -191,7 +209,7 @@ const NewApplication = () => {
           target: 90,
           unit: "%",
           progress: 91,
-          status: "On Track"
+          status: "On Track",
         },
         {
           kr: "Maintain under 15 escalated applications",
@@ -199,10 +217,10 @@ const NewApplication = () => {
           target: 15,
           unit: "apps",
           progress: 125,
-          status: "Ahead"
-        }
-      ]
-    }
+          status: "Ahead",
+        },
+      ],
+    },
   ];
 
   const handleUploadClick = (application) => {
@@ -234,11 +252,16 @@ const NewApplication = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Ahead': return TrendingUp;
-      case 'On Track': return Target;
-      case 'At Risk': return AlertTriangle;
-      case 'Behind': return TrendingDown;
-      default: return Target;
+      case "Ahead":
+        return TrendingUp;
+      case "On Track":
+        return Target;
+      case "At Risk":
+        return AlertTriangle;
+      case "Behind":
+        return TrendingDown;
+      default:
+        return Target;
     }
   };
 
@@ -247,27 +270,27 @@ const NewApplication = () => {
   const allData = useKPIQueries(adhocQuerys.newApplication);
 
   const tableData = useQuery({
-    queryKey: ['newApplicationTable'],
-    queryFn: () => postGetKPIData(tableQueries.newApplication)
-  })
-  
+    queryKey: ["newApplicationTable"],
+    queryFn: () => postGetKPIData(tableQueries.newApplication),
+  });
 
   return (
     <div className="space-y-6">
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-        {allData?.some(query => query?.isLoading) ? (
+        {allData?.some((query) => query?.isLoading) ? (
           // Loading skeleton for KPI cards
           Array.from({ length: 4 }).map((_, index) => (
             <KPISkeleton key={`kpi-skeleton-${index}`} />
           ))
-        ) : allData?.some(query => query?.isError) ? (
+        ) : allData?.some((query) => query?.isError) ? (
           // Error state
           <div className="col-span-4 bg-red-50 border border-red-200 rounded-xl p-6 text-center">
             <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-2" />
             <p className="text-red-700 font-medium">Failed to load KPI data</p>
-            <p className="text-red-600 text-sm mt-1">Please try refreshing the page</p>
+            <p className="text-red-600 text-sm mt-1">
+              Please try refreshing the page
+            </p>
           </div>
         ) : (
           // Success state - render actual KPI cards
@@ -280,15 +303,24 @@ const NewApplication = () => {
             if (!KPIData) return null;
 
             return (
-              <div key={index} className={`${KPIData.bg} rounded-xl p-4 shadow-sm flex flex-col gap-3`}>
+              <div
+                key={index}
+                className={`${KPIData.bg} rounded-xl p-4 shadow-sm flex flex-col gap-3`}
+              >
                 {/* KPI Header */}
                 <div className="flex items-center gap-3">
                   <Icon className={`w-5 h-5 ${KPIData.color}`} />
                   <div>
-                    <p className="text-xs font-medium text-gray-600">{KPIData.title}</p>
+                    <p className="text-xs font-medium text-gray-600">
+                      {KPIData.title}
+                    </p>
                     <p className={`text-lg font-semibold ${KPIData.color}`}>
                       {value}
-                      {KPIData.unit && <span className="text-sm text-gray-500 ml-1">{KPIData.unit}</span>}
+                      {KPIData.unit && (
+                        <span className="text-sm text-gray-500 ml-1">
+                          {KPIData.unit}
+                        </span>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -304,24 +336,26 @@ const NewApplication = () => {
                 {/* Status & Description */}
                 <div className="flex justify-between items-center text-xs">
                   <span
-                    className={`px-2 py-0.5 rounded-full font-medium ${KPIData.status === 'On Track'
-                      ? 'bg-green-100 text-green-700'
-                      : KPIData.status === 'At Risk'
-                        ? 'bg-orange-100 text-orange-700'
-                        : 'bg-red-100 text-red-700'
-                      }`}
+                    className={`px-2 py-0.5 rounded-full font-medium ${
+                      KPIData.status === "On Track"
+                        ? "bg-green-100 text-green-700"
+                        : KPIData.status === "At Risk"
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
                   >
                     {KPIData.status}
                   </span>
                   <span className="text-gray-500">{progressPct}%</span>
                 </div>
-                <p className="text-xs text-gray-600">{KPIData.KPI_Description}</p>
+                <p className="text-xs text-gray-600">
+                  {KPIData.KPI_Description}
+                </p>
               </div>
             );
           })
         )}
       </div>
-
 
       {/* OKR Section */}
       {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -386,8 +420,12 @@ const NewApplication = () => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <section>
-                <h2 className="text-lg font-semibold text-gray-800">New Applications Queue</h2>
-                <p className="text-sm text-gray-600 mt-1">Pending document upload and initial processing</p>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  New Applications Queue
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Pending document upload and initial processing
+                </p>
               </section>
               <section>
                 {/* <button
@@ -426,75 +464,78 @@ const NewApplication = () => {
                     </th>
                   </tr> */}
 
-                  <tr>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="grid grid-cols-[15vw_15vw_15vw_15vw_15vw_15vw]">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Application Ref#
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Account Type
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Assigned Ops Team
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Branch Code
                     </th>
                     {/* <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       KYC Status
                     </th> */}
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
                   </tr>
-
-
                 </thead>
 
-
                 <tbody className="bg-white divide-y divide-gray-200">
-
                   {/* Loading State */}
-                  {tableData.isLoading && Array.from({ length: 5 }).map((_, index) => (
-                    <tr key={`skeleton-${index}`} className="animate-pulse hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="h-4 bg-gray-200 rounded w-20"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="space-y-1">
-                          <div className="h-4 bg-gray-200 rounded w-32"></div>
-                          <div className="h-3 bg-gray-100 rounded w-24"></div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="space-y-1">
-                          <div className="h-4 bg-gray-200 rounded w-28"></div>
-                          <div className="h-3 bg-gray-100 rounded w-20"></div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="h-4 bg-gray-200 rounded w-24"></div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="h-4 bg-gray-200 rounded w-20"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="space-y-2">
-                          <div className="h-5 w-20 rounded-full bg-gray-200"></div>
-                          <div className="h-5 w-20 rounded-full bg-gray-100"></div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="h-8 w-8 bg-gray-200 rounded-lg"></div>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {tableData.isLoading &&
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <tr
+                        key={`skeleton-${index}`}
+                        className="animate-pulse hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="space-y-1">
+                            <div className="h-4 bg-gray-200 rounded w-32"></div>
+                            <div className="h-3 bg-gray-100 rounded w-24"></div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="space-y-1">
+                            <div className="h-4 bg-gray-200 rounded w-28"></div>
+                            <div className="h-3 bg-gray-100 rounded w-20"></div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="h-4 bg-gray-200 rounded w-24"></div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="space-y-2">
+                            <div className="h-5 w-20 rounded-full bg-gray-200"></div>
+                            <div className="h-5 w-20 rounded-full bg-gray-100"></div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="h-8 w-8 bg-gray-200 rounded-lg"
+                              ></div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
 
                   {/* Success State */}
                   {/* {!data.isLoading && !data.isError && data.data?.content?.map((app, index) => (
@@ -556,45 +597,70 @@ const NewApplication = () => {
                     </tr>
                   ))} */}
 
-                  {!tableData.isLoading && !tableData.isError && tableData?.data?.data?.map((app, index) => (
-                    <tr key={index} className="hover:bg-gray-50 transition-colors" onClick={() => handleViewDetail(app)}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-gray-800 font-mono">{app.application_id}</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm font-medium text-gray-800">{app.full_name}</p>
-                          <p className="text-xs text-gray-500">{app.customer_id}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm text-gray-700">{app.account_type}</p>
-                          {/* <p className="text-xs text-gray-500">{app.channel}</p> */}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm text-gray-700">{app.assigned_ops_team}</span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-gray-800">{app.branch_code}</span>
-                      </td>
-                      {/* <td className="px-6 py-4">
+                  {!tableData.isLoading &&
+                    !tableData.isError &&
+                    tableData?.data?.data?.map((app, index) => (
+                      <tr
+                        key={index}
+                        className="hover:bg-gray-50 transition-colors grid grid-cols-[15vw_15vw_15vw_15vw_15vw_15vw]"
+                        onClick={() => handleViewDetail(app)}
+                      >
+                        <td className="px-6 py-4 flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-800 font-mono">
+                            {app.application_id}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 flex items-center justify-center">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">
+                              {app.full_name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {app.customer_id}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 flex items-center justify-center">
+                          <div>
+                            <p className="text-sm text-gray-700">
+                              {app.account_type}
+                            </p>
+                            {/* <p className="text-xs text-gray-500">{app.channel}</p> */}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap flex items-center justify-center">
+                          <span className="text-sm text-gray-700">
+                            {app.assigned_ops_team}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-800">
+                            {app.branch_code}
+                          </span>
+                        </td>
+                        {/* <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${app.statusColor}`}>
                           {app.kyc_status || 'Pending'}
                         </span>
                       </td> */}
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${app.statusColor}`}>
-                          {app.application_status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-
-
+                        <td className="px-6 py-4 flex items-center justify-center">
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              app.application_status === "In Progress"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : app.application_status === "Pending"
+                                ? "bg-amber-100 text-amber-800"
+                                : app.application_status === "Failed"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {app.application_status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
-
               </table>
             </div>
           </div>
@@ -610,15 +676,22 @@ const NewApplication = () => {
 
             <div className="space-y-4">
               {aiSuggestions.map((suggestion, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-lg p-4"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full flex items-center gap-1">
                       <AIIcon size={10} className="text-blue-600" />
                       {suggestion.type}
                     </span>
-                    <span className="text-xs text-gray-500">{suggestion.confidence}</span>
+                    <span className="text-xs text-gray-500">
+                      {suggestion.confidence}
+                    </span>
                   </div>
-                  <p className="text-sm text-gray-700 mb-3">{suggestion.message}</p>
+                  <p className="text-sm text-gray-700 mb-3">
+                    {suggestion.message}
+                  </p>
                   <div className="flex gap-2">
                     <button className="text-xs text-blue-600 border border-blue-200 px-3 py-1 rounded hover:bg-blue-50 transition-colors">
                       Apply
@@ -648,7 +721,9 @@ const NewApplication = () => {
 
             {/* RBAC Access Levels */}
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Access Levels</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-3">
+                Access Levels
+              </h4>
               <div className="space-y-1 text-xs text-gray-600">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-400 rounded-full"></div>
@@ -684,10 +759,16 @@ const NewApplication = () => {
               Upload Documents
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Application: <span className="font-mono font-medium">{selectedApplication.refId}</span>
+              Application:{" "}
+              <span className="font-mono font-medium">
+                {selectedApplication.refId}
+              </span>
             </p>
             <p className="text-sm text-gray-600 mb-6">
-              Client: <span className="font-medium">{selectedApplication.clientName}</span>
+              Client:{" "}
+              <span className="font-medium">
+                {selectedApplication.clientName}
+              </span>
             </p>
 
             <div className="space-y-4">
@@ -748,7 +829,9 @@ const NewApplication = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 !mt-0">
           <div className="bg-white rounded-xl p-6 w-[700px] max-h-[80vh] overflow-y-auto shadow-xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-800">Application Details</h3>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Application Details
+              </h3>
               <button
                 onClick={() => setShowDetailModal(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -761,20 +844,30 @@ const NewApplication = () => {
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Application Reference</p>
-                  <p className="text-sm font-mono font-medium text-gray-800">{selectedAppDetail.application_id}</p>
+                  <p className="text-xs text-gray-500 mb-1">
+                    Application Reference
+                  </p>
+                  <p className="text-sm font-mono font-medium text-gray-800">
+                    {selectedAppDetail.application_id}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Client Name</p>
-                  <p className="text-sm font-medium text-gray-800">{selectedAppDetail.full_name}</p>
+                  <p className="text-sm font-medium text-gray-800">
+                    {selectedAppDetail.full_name}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Client ID</p>
-                  <p className="text-sm font-mono text-gray-700">{selectedAppDetail.customer_id}</p>
+                  <p className="text-sm font-mono text-gray-700">
+                    {selectedAppDetail.customer_id}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Application Type</p>
-                  <p className="text-sm text-gray-700">{selectedAppDetail.account_type}</p>
+                  <p className="text-sm text-gray-700">
+                    {selectedAppDetail.account_type}
+                  </p>
                 </div>
                 {/* <div>
                   <p className="text-xs text-gray-500 mb-1">Channel</p>
@@ -782,18 +875,26 @@ const NewApplication = () => {
                 </div> */}
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Assigned Officer</p>
-                  <p className="text-sm text-gray-700">{selectedAppDetail.assigned_ops_team}</p>
+                  <p className="text-sm text-gray-700">
+                    {selectedAppDetail.assigned_ops_team}
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Current Status */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Current Status</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-3">
+                Current Status
+              </h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-700">Application Status</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${selectedAppDetail.statusColor}`}>
+                  <span className="text-sm text-gray-700">
+                    Application Status
+                  </span>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${selectedAppDetail.statusColor}`}
+                  >
                     {selectedAppDetail.application_status}
                   </span>
                 </div>
@@ -805,7 +906,9 @@ const NewApplication = () => {
                 </div> */}
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <span className="text-sm text-gray-700">SLA Remaining</span>
-                  <span className="text-sm text-gray-700">{selectedAppDetail.sla_due_date}</span>
+                  <span className="text-sm text-gray-700">
+                    {selectedAppDetail.sla_due_date}
+                  </span>
                 </div>
               </div>
             </div>
@@ -897,7 +1000,9 @@ const NewApplication = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Award className="w-6 h-6 text-purple-600" />
-                <h3 className="text-lg font-semibold text-gray-800">New Application OKR Details</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  New Application OKR Details
+                </h3>
               </div>
               <button
                 onClick={closeOkrModal}
@@ -911,45 +1016,72 @@ const NewApplication = () => {
             <div className="bg-purple-50 rounded-lg p-4 mb-6 border border-purple-200">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h4 className="text-lg font-semibold text-purple-800">{selectedOkr.objective}</h4>
-                  <p className="text-sm text-purple-700 mt-1">{selectedOkr.description}</p>
+                  <h4 className="text-lg font-semibold text-purple-800">
+                    {selectedOkr.objective}
+                  </h4>
+                  <p className="text-sm text-purple-700 mt-1">
+                    {selectedOkr.description}
+                  </p>
                 </div>
                 <div className="text-right">
                   <div className="flex items-center gap-2 mb-1">
-                    {React.createElement(getStatusIcon(selectedOkr.status), { className: "w-4 h-4 text-purple-600" })}
-                    <span className={`text-sm px-2 py-1 rounded-full border ${selectedOkr.statusColor}`}>
+                    {React.createElement(getStatusIcon(selectedOkr.status), {
+                      className: "w-4 h-4 text-purple-600",
+                    })}
+                    <span
+                      className={`text-sm px-2 py-1 rounded-full border ${selectedOkr.statusColor}`}
+                    >
                       {selectedOkr.status}
                     </span>
                   </div>
-                  <p className="text-sm text-purple-700">{selectedOkr.progress}% Complete</p>
+                  <p className="text-sm text-purple-700">
+                    {selectedOkr.progress}% Complete
+                  </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-purple-600 font-medium">Owner:</span>
-                  <span className="text-purple-800 ml-2">{selectedOkr.owner}</span>
+                  <span className="text-purple-800 ml-2">
+                    {selectedOkr.owner}
+                  </span>
                 </div>
                 <div>
                   <span className="text-purple-600 font-medium">Quarter:</span>
-                  <span className="text-purple-800 ml-2">{selectedOkr.quarter}</span>
+                  <span className="text-purple-800 ml-2">
+                    {selectedOkr.quarter}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Key Results */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-800 mb-4">Key Results</h4>
+              <h4 className="text-sm font-medium text-gray-800 mb-4">
+                Key Results
+              </h4>
               <div className="space-y-4">
                 {selectedOkr.keyResults.map((kr, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-lg p-4"
+                  >
                     <div className="flex items-center justify-between mb-3">
-                      <h5 className="text-sm font-medium text-gray-800">{kr.kr}</h5>
-                      <span className={`text-xs px-2 py-1 rounded-full ${kr.status === 'On Track' ? 'bg-green-50 text-green-700 border border-green-200' :
-                        kr.status === 'At Risk' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
-                          kr.status === 'Ahead' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-                            'bg-red-50 text-red-700 border border-red-200'
-                        }`}>
+                      <h5 className="text-sm font-medium text-gray-800">
+                        {kr.kr}
+                      </h5>
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          kr.status === "On Track"
+                            ? "bg-green-50 text-green-700 border border-green-200"
+                            : kr.status === "At Risk"
+                            ? "bg-orange-50 text-orange-700 border border-orange-200"
+                            : kr.status === "Ahead"
+                            ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            : "bg-red-50 text-red-700 border border-red-200"
+                        }`}
+                      >
                         {kr.status}
                       </span>
                     </div>
@@ -957,22 +1089,36 @@ const NewApplication = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-600">
-                          Current: <span className="font-medium text-gray-800">{kr.current}{kr.unit}</span>
+                          Current:{" "}
+                          <span className="font-medium text-gray-800">
+                            {kr.current}
+                            {kr.unit}
+                          </span>
                         </span>
                         <span className="text-sm text-gray-600">
-                          Target: <span className="font-medium text-gray-800">{kr.target}{kr.unit}</span>
+                          Target:{" "}
+                          <span className="font-medium text-gray-800">
+                            {kr.target}
+                            {kr.unit}
+                          </span>
                         </span>
                       </div>
-                      <span className="text-sm font-medium text-gray-800">{kr.progress}%</span>
+                      <span className="text-sm font-medium text-gray-800">
+                        {kr.progress}%
+                      </span>
                     </div>
 
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className={`h-2 rounded-full transition-all duration-300 ${kr.status === 'On Track' ? 'bg-green-600' :
-                          kr.status === 'At Risk' ? 'bg-orange-500' :
-                            kr.status === 'Ahead' ? 'bg-blue-600' :
-                              'bg-red-500'
-                          }`}
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          kr.status === "On Track"
+                            ? "bg-green-600"
+                            : kr.status === "At Risk"
+                            ? "bg-orange-500"
+                            : kr.status === "Ahead"
+                            ? "bg-blue-600"
+                            : "bg-red-500"
+                        }`}
                         style={{ width: `${Math.min(kr.progress, 100)}%` }}
                       ></div>
                     </div>

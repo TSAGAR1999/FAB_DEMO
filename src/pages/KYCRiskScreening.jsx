@@ -588,14 +588,27 @@ const KYCRiskScreening = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.kycStatusColor}`}
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                              client.kyc_status === "In Progress"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : client.kyc_status === "pending"
+                                ? "bg-amber-100 text-amber-800"
+                                : client.kyc_status === "Failed"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
                           >
                             {client.kyc_status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.riskTierColor}`}
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                              client.risk_level === "Low"
+                                ? "bg-red-100 text-red-800"
+                                : client.risk_level === "High"
+                                ? "bg-green-100 text-green-800":""
+                            }`}
                           >
                             {client.risk_level}
                           </span>

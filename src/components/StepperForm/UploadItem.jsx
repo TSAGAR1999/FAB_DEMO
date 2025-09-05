@@ -4,6 +4,7 @@ import { PostFabDocs, PostInteractive, UploadFiles } from "../../API/Api";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
+import { agentIds } from "../../Constants";
 
 export default function UploadItem({
     doc,
@@ -12,12 +13,13 @@ export default function UploadItem({
     files,
     handleFiles,
 }) {
-    const {handleExtractedData} = useAuth();
+    const {handleExtractedData,handleAllFormsdata} = useAuth();
     const mutation = useMutation({
         mutationFn: ({ endpoint, formData }) => endpoint === "interact" ? PostInteractive(endpoint, formData) : PostFabDocs(endpoint, formData),
         onSuccess: (data) => {
-            let obj = JSON.parse(data.text);
+            let {document_id,document_status,documents_submitted,upload_method,verification_status,...obj} = JSON.parse(data.text);
             handleExtractedData({[doc.id]:obj})
+            handleAllFormsdata({"docbundle":{document_id,document_status,documents_submitted,upload_method,verification_status}})
             handleUploadedFilesInfo(doc.id, data);
         },
         onError:(error)=>{
@@ -45,7 +47,7 @@ export default function UploadItem({
                         if (contentResponse.msg == "Success") {
                             toast.success("Uploaded file to content service");
                             let formData = {
-                                "agentId": "804990f4-e9b8-419f-9a37-2abdc9e4fd72",
+                                "agentId": agentIds.extractionAgent,
                                 "query": "analyze above image wisely, extract and give me usefull information and no extra words",
                                 "userId": "1",
                                 "sessionId": "",
@@ -74,7 +76,7 @@ export default function UploadItem({
                         if (contentResponse.msg == "Success") {
                             toast.success("Uploaded file to content service");
                             let formData = {
-                                "agentId": "804990f4-e9b8-419f-9a37-2abdc9e4fd72",
+                                "agentId": agentIds.extractionAgent,
                                 "query": "analyze above image wisely, extract and give me usefull information and no extra words",
                                 "userId": "1",
                                 "sessionId": "",

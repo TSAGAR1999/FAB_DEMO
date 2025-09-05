@@ -44,7 +44,8 @@ export default function KYCCompletion() {
             <ArrowLeft className="w-6 h-6" />
           </button>
            <h1 className="text-3xl font-bold text-gray-900 ml-4 leading-tight">
-            KYC Verification
+            {/* KYC Verification */}
+            Upload Documents
            </h1>
         </div>
         <UploadDocs />
