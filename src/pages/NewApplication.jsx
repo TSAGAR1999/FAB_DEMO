@@ -669,12 +669,12 @@ const NewApplication = () => {
         {/* AI Suggestions Panel - Takes 1 column */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            {/* <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <AIIcon size={16} className="text-gray-500" />
               AI Suggestions
-            </h3>
+            </h3> */}
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               {aiSuggestions.map((suggestion, index) => (
                 <div
                   key={index}
@@ -702,7 +702,7 @@ const NewApplication = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Agent Activity Summary */}
             {/* <div className="mt-6 pt-6 border-t border-gray-200">
