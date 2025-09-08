@@ -10,7 +10,10 @@ export const SchemaId = {
   MasterSchema: "68a5c4fd4e7cc90774f5dafb",
   FinalDecisionLog :"689b1ed4e9c2d3295698807d",
   CustomerProfileother:"68b05d844e7cc90774f5db85",
-  AgentConsole:"68b59458449b0c059a42ade8"
+  AgentConsole:"68b80bb9449b0c059a42ae35",
+  ComplianceCheckReport:"6899f04ee9c2d32956987b9f",
+  DocumentBundle:"6899ef64e9c2d32956987b9e",
+  creditRiskScore:"689adc47e9c2d32956987fbb"
 }
 
 export const teams = [
@@ -128,51 +131,51 @@ export const newaccountFormConfig = {
 
 export const KPIList = {
   "StrategicFitKPIs": [
-    {
-      "StrategicOKRName": "Automated Processing Excellence",
-      "ObjectiveDescription": "Achieve 90% straight-through processing",
-      "PrimaryKPIs": "Straight-through processing rate",
-      "TargetValue": "≥90%",
-      "Timeline": "Q3 2025",
-      "KPI_ID": "KPI-007-02",
-      "KPI_Description": "Straight-through processing rate",
-      "KPI_Calculation_Logic": "(Applications completed without manual intervention ÷ Total applications) × 100",
-      "KPI_Frequency": "Daily",
-      "progressColor": "bg-green-500",
-      "bg": "bg-green-50",
-      "Schema_Required": "ALTER TABLE FinalDecisionLog ADD COLUMN manual_intervention BOOLEAN DEFAULT FALSE;",
-      "Query": "SELECT 100.0 * SUM(CASE WHEN manual_intervention = 0 THEN 1 ELSE 0 END) / COUNT(*) AS pct FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_date BETWEEN '1735689600000' AND '1743609599000';"
-    },
-    {
-      "StrategicOKRName": "Processing Speed Revolution",
-      "ObjectiveDescription": "Reduce end-to-end processing time by 50%",
-      "PrimaryKPIs": "End-to-end processing time",
-      "TargetValue": "≤4 hours",
-      "Timeline": "Q4 2025",
-      "KPI_ID": "KPI-007-01",
-      "progressColor": "bg-blue-500",
-      "bg": "bg-blue-50",
-      "KPI_Description": "End-to-end processing time",
-      "KPI_Calculation_Logic": "Average time from application start to completion",
-      "KPI_Frequency": "Daily",
-      "Schema_Required": "Existing PersonalBankAccountApplication and FinalDecisionLog tables",
-      "Query": "SELECT AVG(TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(p.submission_date/1000), FROM_UNIXTIME(f.decision_date/1000)))/60.0 AS pct FROM t_6899ed16e9c2d32956987b9c_t p JOIN t_689b1ed4e9c2d3295698807d_t f ON p.application_id = f.application_id WHERE p.submission_date BETWEEN '1735689600000' AND '1743609599000';"
-    },
-    {
-      "StrategicOKRName": "System Reliability Goal",
-      "ObjectiveDescription": "Maintain 99% system availability",
-      "PrimaryKPIs": "System availability rate",
-      "TargetValue": "≥99%",
-      "Timeline": "Ongoing",
-      "KPI_ID": "KPI-007-03",
-      "progressColor": "bg-green-500",
-      "bg": "bg-green-50",
-      "KPI_Description": "System availability rate",
-      "KPI_Calculation_Logic": "(System uptime ÷ Total time) × 100",
-      "KPI_Frequency": "Real-time",
-      "Schema_Required": "CREATE TABLE SystemUptimeMetric (metric_date DATE, uptime_seconds BIGINT, total_seconds BIGINT DEFAULT 86400);",
-      "Query": "SELECT  100.0 * SUM(CAST(uptime_seconds AS DECIMAL(20,2))) / SUM(CAST(total_seconds AS DECIMAL(20,2))) AS pct FROM t_68a6e9af4e7cc90774f5db06_t WHERE metric_date BETWEEN '1735689600000' AND '1743609599000';"
-    },
+    // {
+    //   "StrategicOKRName": "Automated Processing Excellence",
+    //   "ObjectiveDescription": "Achieve 90% straight-through processing",
+    //   "PrimaryKPIs": "Straight-through processing rate",
+    //   "TargetValue": "≥90%",
+    //   "Timeline": "Q3 2025",
+    //   "KPI_ID": "KPI-007-02",
+    //   "KPI_Description": "Straight-through processing rate",
+    //   "KPI_Calculation_Logic": "(Applications completed without manual intervention ÷ Total applications) × 100",
+    //   "KPI_Frequency": "Daily",
+    //   "progressColor": "bg-green-500",
+    //   "bg": "bg-green-50",
+    //   "Schema_Required": "ALTER TABLE FinalDecisionLog ADD COLUMN manual_intervention BOOLEAN DEFAULT FALSE;",
+    //   "Query": "SELECT 100.0 * SUM(CASE WHEN manual_intervention = 0 THEN 1 ELSE 0 END) / COUNT(*) AS pct FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_date BETWEEN '1735689600000' AND '1743609599000';"
+    // },
+    // {
+    //   "StrategicOKRName": "Processing Speed Revolution",
+    //   "ObjectiveDescription": "Reduce end-to-end processing time by 50%",
+    //   "PrimaryKPIs": "End-to-end processing time",
+    //   "TargetValue": "≤4 hours",
+    //   "Timeline": "Q4 2025",
+    //   "KPI_ID": "KPI-007-01",
+    //   "progressColor": "bg-blue-500",
+    //   "bg": "bg-blue-50",
+    //   "KPI_Description": "End-to-end processing time",
+    //   "KPI_Calculation_Logic": "Average time from application start to completion",
+    //   "KPI_Frequency": "Daily",
+    //   "Schema_Required": "Existing PersonalBankAccountApplication and FinalDecisionLog tables",
+    //   "Query": "SELECT AVG(TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(p.submission_date/1000), FROM_UNIXTIME(f.decision_date/1000)))/60.0 AS pct FROM t_6899ed16e9c2d32956987b9c_t p JOIN t_689b1ed4e9c2d3295698807d_t f ON p.application_id = f.application_id WHERE p.submission_date BETWEEN '1735689600000' AND '1743609599000';"
+    // },
+    // {
+    //   "StrategicOKRName": "System Reliability Goal",
+    //   "ObjectiveDescription": "Maintain 99% system availability",
+    //   "PrimaryKPIs": "System availability rate",
+    //   "TargetValue": "≥99%",
+    //   "Timeline": "Ongoing",
+    //   "KPI_ID": "KPI-007-03",
+    //   "progressColor": "bg-green-500",
+    //   "bg": "bg-green-50",
+    //   "KPI_Description": "System availability rate",
+    //   "KPI_Calculation_Logic": "(System uptime ÷ Total time) × 100",
+    //   "KPI_Frequency": "Real-time",
+    //   "Schema_Required": "CREATE TABLE SystemUptimeMetric (metric_date DATE, uptime_seconds BIGINT, total_seconds BIGINT DEFAULT 86400);",
+    //   "Query": "SELECT  100.0 * SUM(CAST(uptime_seconds AS DECIMAL(20,2))) / SUM(CAST(total_seconds AS DECIMAL(20,2))) AS pct FROM t_68a6e9af4e7cc90774f5db06_t WHERE metric_date BETWEEN '1735689600000' AND '1743609599000';"
+    // },
     {
       "StrategicOKRName": "Digital Transformation Target",
       "ObjectiveDescription": "Achieve 95% first-time data capture accuracy",
@@ -842,14 +845,15 @@ export const adhocQuerys = {
 
 export const tableQueries = {
   "newApplication": "SELECT t1.*, t2.customer_id, t2.full_name FROM t_6899ed16e9c2d32956987b9c_t AS t1 JOIN t_6899eeb2e9c2d32956987b9d_t AS t2 ON t1.application_id = t2.application_id ;",
-  "applicationStatus": "SELECT t1.customer_id, t1.full_name, t2.assigned_ops_team, t3.documents_submitted, t3.verification_status FROM t_6899eeb2e9c2d32956987b9d_t AS t1 JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id JOIN t_6899ef64e9c2d32956987b9e_t AS t3 ON t1.application_id = t3.application_id;",
-  "KYCRiskScreening": "SELECT t1.application_id, t1.nationality, t2.assigned_ops_team, t2.account_type, t4.risk_level, t4.checked_by, t4.review_notes, t1.customer_id, t1.full_name, t2.kyc_status FROM t_6899eeb2e9c2d32956987b9d_t AS t1 JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id JOIN t_6899f04ee9c2d32956987b9f_t AS t4 ON t1.application_id = t4.application_id;",
-  "complianceCheck":"SELECT * FROM t_6899eeb2e9c2d32956987b9d_t a JOIN t_6899f04ee9c2d32956987b9f_t b ON a.application_id = b.application_id;"
+  "applicationStatus": "SELECT t1.customer_id, t1.full_name, t2.assigned_ops_team, t3.documents_submitted, t3.verification_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899ef64e9c2d32956987b9e_t AS t3 ON t1.application_id = t3.application_id ORDER BY t1.created_at + 0 DESC;",
+  "KYCRiskScreening": "SELECT t1.application_id, t1.nationality, t2.assigned_ops_team, t2.account_type, t4.risk_level, t4.checked_by, t4.review_notes, t1.customer_id, t1.full_name, t2.kyc_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899f04ee9c2d32956987b9f_t AS t4 ON t1.application_id = t4.application_id ORDER BY t1.created_at + 0 DESC;",
+  "complianceCheck":"SELECT a.*, b.*, FROM_UNIXTIME(a.created_at / 1000) AS created_at_readable FROM t_6899eeb2e9c2d32956987b9d_t a left JOIN t_6899f04ee9c2d32956987b9f_t b ON a.application_id = b.application_id ORDER BY a.created_at + 0 DESC;"
 }
 
 export const agentIds = {
   "fileRead":"0198e4f4-8bbe-7bdb-8040-864e31efe299",
   "complianceAgent":"a6491dea-d201-447d-825c-4eb7be73a692",
   "mainAgent":"38191ed6-3a48-4bc9-a2d8-153fbf2d32a1",
-  "kycAgent":"5ebd931d-83b4-459e-8e0c-edba096bc487"
+  "kycAgent":"5ebd931d-83b4-459e-8e0c-edba096bc487",
+  "extractionAgent":"804990f4-e9b8-419f-9a37-2abdc9e4fd72"
 };

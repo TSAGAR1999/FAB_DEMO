@@ -10,7 +10,7 @@ export default function VerifyEmail() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nationality: "United Arab Emirates",
-    phoneNumber: "",
+    // phoneNumber: "",
     email: "",
     confirmEmail: "",
   });
@@ -45,7 +45,7 @@ export default function VerifyEmail() {
   const isFormValid = () => {
     return (
       formData.nationality &&
-      formData.phoneNumber &&
+      // formData.phoneNumber &&
       formData.email &&
       formData.confirmEmail &&
       formData.email === formData.confirmEmail
@@ -123,7 +123,7 @@ export default function VerifyEmail() {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <input
                 type="tel"
                 placeholder="Phone number"
@@ -133,7 +133,7 @@ export default function VerifyEmail() {
                 }
                 className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-            </div>
+            </div> */}
 
             <div>
               <input

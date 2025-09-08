@@ -473,14 +473,13 @@ const AuditTrail = () => {
       </div> */}
 
       {/* Filter Strip */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">Filters:</span>
           </div>
 
-          {/* Date Range Filter */}
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-gray-500" />
             <select
@@ -495,7 +494,6 @@ const AuditTrail = () => {
             </select>
           </div>
 
-          {/* Screen Filter */}
           <select
             value={filters.screen}
             onChange={(e) => handleFilterChange('screen', e.target.value)}
@@ -508,7 +506,6 @@ const AuditTrail = () => {
             <option value="status">Application Status</option>
           </select>
 
-          {/* Action Type Filter */}
           <select
             value={filters.actionType}
             onChange={(e) => handleFilterChange('actionType', e.target.value)}
@@ -521,7 +518,6 @@ const AuditTrail = () => {
             <option value="assignment">Assignments</option>
           </select>
 
-          {/* User Role Filter */}
           <select
             value={filters.userRole}
             onChange={(e) => handleFilterChange('userRole', e.target.value)}
@@ -534,7 +530,6 @@ const AuditTrail = () => {
             <option value="officer">Officers</option>
           </select>
 
-          {/* View Mode Toggle */}
           <div className="flex items-center gap-1 ml-auto">
             <button
               onClick={() => setViewMode('table')}
@@ -556,7 +551,7 @@ const AuditTrail = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -598,7 +593,7 @@ const AuditTrail = () => {
                             <span className="text-sm font-mono text-gray-800">{log.application_id}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600">{log.decision_status}</span>
+                            <span className={`text-sm text-gray-600 p-2 rounded-lg ${log.decision_status=="verified"?"text-green-500 border border-green-500":log.decision_status=="not verified"?"text-red-500 border border-red-500":""}`}>{log.decision_status}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="text-sm text-gray-600">{log.decision_date}</span>

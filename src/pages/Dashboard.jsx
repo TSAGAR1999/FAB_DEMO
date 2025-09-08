@@ -26,6 +26,12 @@ import RoleGuard from '../components/RoleGuard';
 import { useAuth } from '../contexts/AuthContext';
 import { useKPIQueries } from '../API/BqsQuery';
 import { KPIList } from '../Constants';
+import AutomatedProcessing from './AutomatedProcessing';
+import ProcessingSpeedRevolution from './ProcessingSpeedRevolution';
+import SystemReliability from './SystemReliability';
+import DigiTransform from './SanctionsCompliance';
+import KYCComplaiceMaster from './KYCComplaiceMaster';
+import SanctionsCompliance from './SanctionsCompliance';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -1372,10 +1378,12 @@ const Dashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Personal Account Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
         <p className="text-gray-600 mt-1">Strategic KPIs, operational metrics, and compliance analytics for personal banking workflows</p>
       </div>
+{/* Account Intelligence Center */}
 
+{/* Banking Operations Dashboard */}
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
@@ -1466,6 +1474,14 @@ const Dashboard = () => {
               {/* {kPIsData.isLoading && [1, 2, 3].map(item => (<div key={item} className="h-32 bg-gray-100 animate-pulse rounded-lg" />))} */}
               {kPIsData?.map(kpi => renderKPICardR(kpi.data))}
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <AutomatedProcessing/>
+              <ProcessingSpeedRevolution/>
+              <SystemReliability/>
+              {/* <KYCComplaiceMaster/>
+              <SanctionsCompliance/> */}
+            
+              </div>
           </div>
         </div>
       )}

@@ -8,6 +8,8 @@ export default function EmploymentDetailsForm() {
   const [formData, setFormData] = useState({
     employmentStatus: "",
     monthlySalary: "",
+    employer:"",
+    position:"",
     emirateArea: "",
     nearestFabBranch: "",
   });
@@ -68,6 +70,8 @@ export default function EmploymentDetailsForm() {
       formData.employmentStatus &&
       formData.monthlySalary &&
       formData.emirateArea &&
+      formData.employer &&
+      formData.position &&
       formData.nearestFabBranch
     );
   };
@@ -79,7 +83,7 @@ export default function EmploymentDetailsForm() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-blue-950">
-      <div className="bg-white rounded-xl mx-4 w-full max-w-2xl">
+      <div className="bg-white rounded-xl mx-4 w-full max-w-2xl h-[70%] overflow-y-auto">
         <div className="px-6 py-3  flex items-center justify-between bg-white rounded-xl">
           <button onClick={()=>navigate("/verify-otp")} className="text-blue-500 hover:text-blue-600 transition-colors">
             <ArrowLeft className="w-6 h-6" />
@@ -121,29 +125,52 @@ export default function EmploymentDetailsForm() {
               </div>
             </div>
 
+            {/* Monthly Salary */}
             <div>
               <label className="block text-gray-600 text-sm mb-2">
                 Monthly Salary
               </label>
-              <div className="relative">
-                <select
-                  value={formData.monthlySalary}
-                  onChange={(e) =>
-                    handleInputChange("monthlySalary", e.target.value)
-                  }
-                  className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="" disabled className="text-gray-400">
-                    Select monthly salary range
-                  </option>
-                  {monthlySalaries.map((salary) => (
-                    <option key={salary} value={salary}>
-                      {salary}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-              </div>
+              <input
+                type="text"
+                value={formData.monthlySalary}
+                onChange={(e) =>
+                  handleInputChange("monthlySalary", e.target.value)
+                }
+                placeholder="Enter Monthly Salary"
+                className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Monthly Salary */}
+            <div>
+              <label className="block text-gray-600 text-sm mb-2">
+                Employer
+              </label>
+              <input
+                type="text"
+                value={formData.employer}
+                onChange={(e) =>
+                  handleInputChange("employer", e.target.value)
+                }
+                placeholder="Enter Employer"
+                className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Monthly Salary */}
+            <div>
+              <label className="block text-gray-600 text-sm mb-2">
+                Position of Employment
+              </label>
+              <input
+                type="text"
+                value={formData.position}
+                onChange={(e) =>
+                  handleInputChange("position", e.target.value)
+                }
+                placeholder="Enter Position of Employment"
+                className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
 
             <div>

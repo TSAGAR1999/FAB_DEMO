@@ -39,7 +39,7 @@ let interactivepayload = {
 let AgentConsolepayload = {
   agent_name: "",
   agent_id: "",
-  last_used: "",
+  lastused: "",
   response_time: "",
   activity_log: "",
   status: "",
@@ -71,8 +71,18 @@ export default function TaxDeclaration() {
     setLoading(true);
     try {
       let allData = { ...allformsData, ...formData };
-      let id = generateRandomUniqueId();
+      let id = uuidv4();
       let date = new Date().toISOString().slice(0, 10);
+      let customer_id = generateRandomUniqueId();
+      const creditRiskData = {data:[{
+        credit_report_id:uuidv4(),
+        customer_id,
+        monthly_income:allData.monthlySalary,
+        employment_details:{
+          employer:allData.employer,
+          position:allData.position
+        }
+      }]}
       const filterData = {
         data: [
           {
@@ -85,7 +95,7 @@ export default function TaxDeclaration() {
               mobile: allData.phoneNumber,
               address: allData.addressLine1,
             },
-            customer_id: uuidv4(),
+            customer_id,
             application_id: id,
             emirates_id: allData.emiratesIDNo,
             created_at: `${Date.now()}`,
@@ -112,6 +122,10 @@ export default function TaxDeclaration() {
         personalBankAccountApplicationData
       );
       await PostSchema(`${SchemaId.CustomerProfile}/instances`, filterData);
+
+      await PostSchema(`${SchemaId.DocumentBundle}/instances`, {data:[{...allData.docbundle,application_id:id}]});
+
+      await PostSchema(`${SchemaId.creditRiskScore}/instances`, creditRiskData);
  
       const kycquery = `emirates_id:${allData.emiratesIDNo}`;
 
@@ -131,9 +145,10 @@ export default function TaxDeclaration() {
 
       let kycConsole = {
         ...AgentConsolepayload,
+        id:uuidv4(),
         agent_name: "kyc_agent",
         agent_id: agentIds.kycAgent,
-        last_used: new Date().toISOString(),
+        lastused: new Date().toISOString(),
         response_time: ((endTime - startTime)/1000).toFixed(2),
         activity_log: kycRes.retrbidy.data[0].activity_log,
         status: "Active"
@@ -159,15 +174,16 @@ export default function TaxDeclaration() {
 
       let complainceConsole = {
         ...AgentConsolepayload,
+        id:uuidv4(),
         agent_name: "Compliance_agent",
         agent_id: agentIds.complianceAgent,
-        last_used: new Date().toISOString(),
+        lastused: new Date().toISOString(),
         response_time: ((endTime - startTime)/1000).toFixed(2),
         activity_log: complainceoutput.retrbidy.data[0].activity_log,
         status: "Active"
       }
 
-       await PostSchema(`${SchemaId.AgentConsole}/instances`, {data:[{...complainceConsole}]});
+      await PostSchema(`${SchemaId.AgentConsole}/instances`, {data:[{...complainceConsole}]});
 
       let finaldecisionquery = `Kyc status is verified and complaiance status is clear and 'companies': [ 'Bright Future Technologies LLC', 'Desert Star Trading FZE', 'Oasis Hospitality Group', 'Skyline Construction LLC', 'EmirTech Solutions', 'Golden Sands Finance', 'Pearl Marine Services', 'Falcon Aviation Services', 'Blue Horizon Media', 'Sunrise Retail Group' ] } give me verifed or not verifed? and application_id is '${id}' and decision_id is ${uuidv4()}`;
       
@@ -175,6 +191,9 @@ export default function TaxDeclaration() {
         ...interactivepayload,
         agentId: agentIds.mainAgent,
         query: finaldecisionquery,
+        "fileUrl": [
+        "https://cdn.gov-cloud.ai/_ENC(nIw4FQRwLOQd0b8T2HcImBUJ5a9zjZEImv/UhJi8/+yUl7Ez+m0qAiCCaOJbNgi5)/FAB/e42b68b0-fe0a-4935-9c4a-fafdb3b71c19_$$_V1_sample_payslip_with_company.pdf"
+    ]
       };
       await PostInteractive("interact", finaldecisionlogpayload);
       navigate("/personal-banking/new-application");
@@ -189,6 +208,7 @@ export default function TaxDeclaration() {
     } catch (error) {
       toast.error(error.message);
       setLoading(false);
+      navigate("/personal-banking/new-application");
     }
     finally{
       setLoading(false);

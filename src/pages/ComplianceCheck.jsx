@@ -16,9 +16,6 @@ const ComplianceCheck = () => {
   const [showOkrModal, setShowOkrModal] = useState(false);
   const [selectedOkr, setSelectedOkr] = useState(null);
 
-  console.log(selectedClient,"selectedClient");
-  
-
   const kpis = [
     {
       id: 'apps-screened-today',
