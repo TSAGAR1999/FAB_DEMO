@@ -3,7 +3,7 @@ import * as echarts from "echarts";
 import { useQuery } from "@tanstack/react-query";
 import { postGetKPIData } from "../API/BqsApi";
 
-export default function DigiTransform() {
+export default function SanctionsCompliance() {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
 
@@ -126,7 +126,7 @@ export default function DigiTransform() {
 
   return (
     <div className="w-full">
-      <h1 className="mb-3">Digital Transformation Target</h1>
+      <h1 className="mb-3">Sanctions vs. Compliance Heatmap</h1>
       <div ref={containerRef} className="h-96 w-full rounded-xl bg-white" />
     </div>
   );

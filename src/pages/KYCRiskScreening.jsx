@@ -587,7 +587,7 @@ const KYCRiskScreening = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span
+                          {client.kyc_status && <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
                               client.kyc_status === "In Progress"
                                 ? "bg-yellow-100 text-yellow-800"
@@ -599,10 +599,10 @@ const KYCRiskScreening = () => {
                             }`}
                           >
                             {client.kyc_status}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span
+                          {client.risk_level && <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
                               client.risk_level === "Low"
                                 ? "bg-red-100 text-red-800"
@@ -611,14 +611,14 @@ const KYCRiskScreening = () => {
                             }`}
                           >
                             {client.risk_level}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span
+                         {client.review_notes && <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.riskTierColor}`}
                           >
                             {client.review_notes}
-                          </span>
+                          </span>}
                         </td>
                       </tr>
                     ))}
