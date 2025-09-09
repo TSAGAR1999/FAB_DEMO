@@ -478,7 +478,7 @@ const NewApplication = () => {
                       Assigned Ops Team
                     </th>
                     <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Branch Code
+                      Branch
                     </th>
                     {/* <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       KYC Status
@@ -610,7 +610,7 @@ const NewApplication = () => {
                             {app.application_id}
                           </span>
                         </td>
-                        <td className="px-6 py-4 flex items-center justify-center">
+                        <td className="px-6 py-4 flex items-center">
                           <div>
                             <p className="text-sm font-medium text-gray-800">
                               {app.full_name}
@@ -634,7 +634,7 @@ const NewApplication = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                          <span className="text-sm font-medium text-gray-800">
+                          <span className="text-sm text-gray-700">
                             {app.branch_code}
                           </span>
                         </td>

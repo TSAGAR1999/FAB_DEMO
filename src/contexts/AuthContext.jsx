@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [fabAccountTypes,setFabAccountTypes] = useState([]);
-  const [email,setEmail] = useState("");
   const [allformsData,setAllFormsdata] = useState({});
   let [extractedData,setExtractedData] = useState({});
 
@@ -148,10 +147,6 @@ export const AuthProvider = ({ children }) => {
     setFabAccountTypes(accounts)
   };
 
-  const handleEmail= (email) => {
-    setEmail(email)
-  };
-
   const handleAllFormsdata = (formdata)=>{
     setAllFormsdata(prev=>({...prev,...formdata}))
   }
@@ -169,8 +164,6 @@ export const AuthProvider = ({ children }) => {
     roles: ROLES,
     fabAccountTypes,
     handleFabAccountTypes,
-    handleEmail,
-    email,
     handleAllFormsdata,
     allformsData,
     handleExtractedData,

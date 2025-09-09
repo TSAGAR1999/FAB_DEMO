@@ -71,9 +71,9 @@ export default function TaxDeclaration() {
     setLoading(true);
     try {
       let allData = { ...allformsData, ...formData };
-      let id = uuidv4();
+      let id = generateRandomUniqueId();
       let date = new Date().toISOString().slice(0, 10);
-      let customer_id = generateRandomUniqueId();
+      let customer_id = uuidv4();
       const creditRiskData = {data:[{
         credit_report_id:uuidv4(),
         customer_id,
@@ -113,6 +113,8 @@ export default function TaxDeclaration() {
             submission_date: `${Date.now()}`,
             sla_due_date: `${Date.now()}`,
             kyc_status: allData.kyc_status,
+            branch_code: allData.nearestFabBranch
+
           },
         ],
       };
@@ -127,7 +129,7 @@ export default function TaxDeclaration() {
 
       await PostSchema(`${SchemaId.creditRiskScore}/instances`, creditRiskData);
  
-      const kycquery = `emirates_id:${allData.emiratesIDNo}`;
+      const kycquery = `emirates_id:${allData.emiratesIDNo} and bank type = ${allData.selectedAccountType}`;
 
       let kycpayload = {
         ...interactivepayload,
@@ -196,9 +198,9 @@ export default function TaxDeclaration() {
     ]
       };
       await PostInteractive("interact", finaldecisionlogpayload);
-      navigate("/personal-banking/new-application");
+      navigate("/dashboard");
       setLoading(false);
-      // PostSchema(`${SchemaId.MasterSchema}/instances`, reqData).then((data) => {
+      // PostSchema(`${SchemaId.MasterSchema}/instpersonal-banking/new-applicationances`, reqData).then((data) => {
       //   console.log("Form submitted successfully", data);
       //   toast.success("Form submitted successfully");
       //   setTimeout(() => {
@@ -208,7 +210,7 @@ export default function TaxDeclaration() {
     } catch (error) {
       toast.error(error.message);
       setLoading(false);
-      navigate("/personal-banking/new-application");
+      navigate("/dashboard");
     }
     finally{
       setLoading(false);

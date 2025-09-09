@@ -575,23 +575,23 @@ const ComplianceCheck = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.complianceColor}`}>
+                          {client.compliance_status && <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.complianceColor}`}>
                             {client.compliance_status}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-700">{client.risk_level}</span>
+                          {client.risk_level && <span className="text-sm text-gray-700">{client.risk_level}</span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-700">{client.checked_by}</span>
+                          {client.checked_by && <span className="text-sm text-gray-700">{client.checked_by}</span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.statusColor}`}>
+                          {client.sanctions_list_result && <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.statusColor}`}>
                             {client.sanctions_list_result}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className='text-sm text-gray-700'>{client.review_notes}</span>
+                         {client.review_notes && <span className='text-sm text-gray-700'>{client.review_notes}</span>}
                         </td>
                       </tr>
                     ))}
