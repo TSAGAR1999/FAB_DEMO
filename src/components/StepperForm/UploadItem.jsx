@@ -17,9 +17,9 @@ export default function UploadItem({
     const mutation = useMutation({
         mutationFn: ({ endpoint, formData }) => endpoint === "interact" ? PostInteractive(endpoint, formData) : PostFabDocs(endpoint, formData),
         onSuccess: (data) => {
-            let {document_id,document_status,documents_submitted,upload_method,verification_status,...obj} = JSON.parse(data.text);
+            let {document_id,document_status,documents_submitted,upload_method,verification_status,ocr_confidence_score,...obj} = JSON.parse(data.text);
             handleExtractedData({[doc.id]:obj})
-            handleAllFormsdata({"docbundle":{document_id,document_status,documents_submitted,upload_method,verification_status}})
+            handleAllFormsdata({"docbundle":{document_id,document_status,documents_submitted,upload_method,verification_status,ocr_confidence_score}})
             handleUploadedFilesInfo(doc.id, data);
         },
         onError:(error)=>{

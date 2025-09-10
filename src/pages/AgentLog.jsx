@@ -36,9 +36,11 @@ export default function AgentLog() {
     queryKey: ["agentConsole"],
     queryFn: () =>
       postGetKPIData(
-        "SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT('agent_id', agent_id, 'agent_name', agent_name, 'status', status, 'activity_log', activity_log))) as AGENTS FROM (SELECT agent_id, agent_name, status, JSON_ARRAYAGG(JSON_OBJECT('id', id, 'response_time', response_time, 'lastused', lastused, 'action', activity_log)) AS activity_log FROM t_68b80bb9449b0c059a42ae35_t GROUP BY agent_id, agent_name, status) AS g;"
+        "SELECT COALESCE( JSON_ARRAYAGG( JSON_OBJECT( 'agent_id', agent_id, 'agent_name', agent_name, 'status', status, 'activity_log', activity_log ) ) ) AS AGENTS FROM ( SELECT agent_id, agent_name, status, JSON_ARRAYAGG( JSON_OBJECT( 'id', id, 'response_time', response_time, 'lastused', lastused, 'action', activity_log ) ) AS activity_log FROM ( SELECT agent_id, agent_name, status, id, response_time, lastused, activity_log FROM t_68b80bb9449b0c059a42ae35_t ORDER BY agent_id, agent_name, status, lastused DESC ) AS ordered GROUP BY agent_id, agent_name, status ) AS g;"
       ),
   });
+
+  //"SELECT agent_id, agent_name, status, JSON_OBJECTAGG( CONCAT('log_', rn), JSON_OBJECT( 'id', id, 'response_time', response_time, 'lastused', lastused, 'action', activity_log ) ) AS activity_log FROM ( SELECT agent_id, agent_name, status, id, response_time, lastused, activity_log, ROW_NUMBER() OVER ( PARTITION BY agent_id, agent_name, status ORDER BY lastused DESC ) AS rn FROM t_68b80bb9449b0c059a42ae35_t ) ranked GROUP BY agent_id, agent_name, status;"
 
   const loadingSkeletons = Array.from({ length: 3 });
 

@@ -478,7 +478,7 @@ const NewApplication = () => {
                       Assigned Ops Team
                     </th>
                     <th className="text-center flex items-center justify-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Branch Code
+                      Branch
                     </th>
                     {/* <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                       KYC Status
@@ -610,7 +610,7 @@ const NewApplication = () => {
                             {app.application_id}
                           </span>
                         </td>
-                        <td className="px-6 py-4 flex items-center justify-center">
+                        <td className="px-6 py-4 flex items-center">
                           <div>
                             <p className="text-sm font-medium text-gray-800">
                               {app.full_name}
@@ -634,7 +634,7 @@ const NewApplication = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                          <span className="text-sm font-medium text-gray-800">
+                          <span className="text-sm text-gray-700">
                             {app.branch_code}
                           </span>
                         </td>
@@ -669,12 +669,12 @@ const NewApplication = () => {
         {/* AI Suggestions Panel - Takes 1 column */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            {/* <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <AIIcon size={16} className="text-gray-500" />
               AI Suggestions
-            </h3>
+            </h3> */}
 
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               {aiSuggestions.map((suggestion, index) => (
                 <div
                   key={index}
@@ -702,7 +702,7 @@ const NewApplication = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Agent Activity Summary */}
             {/* <div className="mt-6 pt-6 border-t border-gray-200">

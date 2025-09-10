@@ -8,6 +8,7 @@ import { adhocQuerys, tableQueries } from '../Constants';
 import KPISkeleton from './KPISkeleton';
 import { useQuery } from '@tanstack/react-query';
 import { postGetKPIData } from '../API/BqsApi';
+import RiskLevelChart from './RiskLevelChart';
 const ComplianceCheck = () => {
   const [showClientModal, setShowClientModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -405,6 +406,10 @@ const ComplianceCheck = () => {
         )}
       </div>
 
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-4'>
+        <RiskLevelChart/>
+      </div>
+
 
       {/* OKR Section */}
       {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -575,23 +580,23 @@ const ComplianceCheck = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.complianceColor}`}>
+                          {client.compliance_status && <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.complianceColor}`}>
                             {client.compliance_status}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-700">{client.risk_level}</span>
+                          {client.risk_level && <span className="text-sm text-gray-700">{client.risk_level}</span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-700">{client.checked_by}</span>
+                          {client.checked_by && <span className="text-sm text-gray-700">{client.checked_by}</span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.statusColor}`}>
+                          {client.sanctions_list_result && <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${client.statusColor}`}>
                             {client.sanctions_list_result}
-                          </span>
+                          </span>}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className='text-sm text-gray-700'>{client.review_notes}</span>
+                         {client.review_notes && <span className='text-sm text-gray-700'>{client.review_notes}</span>}
                         </td>
                       </tr>
                     ))}

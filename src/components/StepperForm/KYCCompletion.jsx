@@ -35,7 +35,7 @@ export default function KYCCompletion() {
     });
   return (
     <div className="h-screen flex mx-auto flex-col items-center justify-center bg-blue-950 p-3">
-      <div className="w-full h-[80%] overflow-y-auto max-w-2xl bg-white rounded-xl flex flex-col">
+      <div className="w-full max-h-[80%] overflow-y-auto max-w-2xl bg-white rounded-xl flex flex-col">
         <div className="px-6 py-3 flex items-center bg-white rounded-xl">
           <button
             onClick={() => navigate("/employment-details")}

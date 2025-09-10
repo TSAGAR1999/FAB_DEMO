@@ -523,7 +523,7 @@ export const adhocQuerys = {
       icon: FileText,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
-      target: 50,
+      target: 200,
       direction: 'higher',
       progressPct: 94,
       status: 'On Track',
@@ -567,7 +567,7 @@ export const adhocQuerys = {
       KPI_Description: 'Total applications approved so far.',
       trend: {},
       tooltip: '',
-      Query: "select count(application_id) as resp from t_6899ed16e9c2d32956987b9c_t where kyc_status = 'approved';"
+      Query: "select count(application_id) as resp from t_6899ed16e9c2d32956987b9c_t where application_status = 'approved';"
     },
     {
       KPI_ID: 'applications-pending',
@@ -585,7 +585,7 @@ export const adhocQuerys = {
       KPI_Description: 'Total applications pending.',
       trend: {},
       tooltip: '',
-      Query:"select count(*) as resp from t_6899ed16e9c2d32956987b9c_t where application_status = 'pending'"
+      Query:"select count(*) as resp from t_6899ed16e9c2d32956987b9c_t WHERE application_status IN ('pending', 'In Progress')"
     }
   ],
   "KYCRiskScreening": [
@@ -611,7 +611,7 @@ export const adhocQuerys = {
       KPI_ID: 'total kyc checked',
       title: 'Total KYC checked',
       value: 76,
-      unit: '%',
+      unit: '',
       icon: CheckCircle,
       color: 'text-green-600',
       bg: 'bg-green-50',
@@ -623,7 +623,7 @@ export const adhocQuerys = {
       KPI_Description: 'Proportion of cases checked without manual intervention.',
       trend: { delta: '+2%', period: 'WoW', direction: 'up' },
       tooltip: 'Target: 80% cleared automatically',
-      Query: "SELECT  100.0 * SUM(CASE WHEN kyc_status IN ('Clear', 'Cleared_Override','Done','done','Completed','Approved') THEN 1 ELSE 0 END) / COUNT(*) AS resp FROM t_6899ed16e9c2d32956987b9c_t ;"
+      Query: "SELECT  100.0 * SUM(CASE WHEN kyc_status IN ('Clear', 'Cleared_Override','Done','done','Completed','approved','APPROVED') THEN 1 ELSE 0 END) / COUNT(*) AS resp FROM t_6899ed16e9c2d32956987b9c_t ;"
     }
   ],
   "ComplianceCheck": [
@@ -646,25 +646,25 @@ export const adhocQuerys = {
       Query:
         "SELECT (SUM(CASE WHEN compliance_status = 'Clear' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_6899f04ee9c2d32956987b9f_t;"
     },
-    {
-      KPI_ID: 'Risk level distribution',
-      title: 'Risk level distribution',
-      value: null,
-      unit: '',
-      icon: ShieldCheck,
-      color: 'text-indigo-600',
-      bg: 'bg-indigo-50',
-      target: null,
-      direction: 'neutral',
-      progressPct: null,
-      status: 'TBD',
-      progressColor: 'bg-indigo-600',
-      KPI_Description: 'Breakdown of clients by assigned risk level.',
-      trend: { delta: null, period: 'WoW', direction: null },
-      tooltip: 'Use for stacked bar/pie showing Low/Medium/High proportions',
-      Query:
-        "SELECT risk_level, COUNT(*) AS resp FROM t_6899f04ee9c2d32956987b9f_t GROUP BY risk_level;"
-    },
+    // {
+    //   KPI_ID: 'Risk level distribution',
+    //   title: 'Risk level distribution',
+    //   value: null,
+    //   unit: '',
+    //   icon: ShieldCheck,
+    //   color: 'text-indigo-600',
+    //   bg: 'bg-indigo-50',
+    //   target: null,
+    //   direction: 'neutral',
+    //   progressPct: null,
+    //   status: 'TBD',
+    //   progressColor: 'bg-indigo-600',
+    //   KPI_Description: 'Breakdown of clients by assigned risk level.',
+    //   trend: { delta: null, period: 'WoW', direction: null },
+    //   tooltip: 'Use for stacked bar/pie showing Low/Medium/High proportions',
+    //   Query:
+    //     "SELECT risk_level, COUNT(*) AS resp FROM t_6899f04ee9c2d32956987b9f_t GROUP BY risk_level;"
+    // },
     {
       KPI_ID: 'Manual review rate',
       title: 'Manual review rate',
@@ -760,27 +760,27 @@ export const adhocQuerys = {
       trend: { delta: null, period: 'WoW', direction: null },
       tooltip: 'Goal: ≥98% account creation success',
       Query:
-        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
+        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t"
     },
-    {
-      KPI_ID: 'Customer notification rate',
-      title: 'Customer notification rate',
-      value: null, // <- bind to query result alias below (notification_rate_percentage)
-      unit: '%',
-      icon: Bell,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
-      target: 99, // higher is better
-      direction: 'higher',
-      progressPct: null,
-      status: 'TBD',
-      progressColor: 'bg-purple-600',
-      KPI_Description: 'Percent of customers notified of the decision.',
-      trend: { delta: null, period: 'WoW', direction: null },
-      tooltip: 'Goal: ≥99% customers notified',
-      Query:
-        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
-    }
+    // {
+    //   KPI_ID: 'Customer notification rate',
+    //   title: 'Customer notification rate',
+    //   value: null, // <- bind to query result alias below (notification_rate_percentage)
+    //   unit: '%',
+    //   icon: Bell,
+    //   color: 'text-purple-600',
+    //   bg: 'bg-purple-50',
+    //   target: 99, // higher is better
+    //   direction: 'higher',
+    //   progressPct: null,
+    //   status: 'TBD',
+    //   progressColor: 'bg-purple-600',
+    //   KPI_Description: 'Percent of customers notified of the decision.',
+    //   trend: { delta: null, period: 'WoW', direction: null },
+    //   tooltip: 'Goal: ≥99% customers notified',
+    //   Query:
+    //     "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
+    // }
   ],
   "ApplicationStatus": [
     {
@@ -844,7 +844,7 @@ export const adhocQuerys = {
 }
 
 export const tableQueries = {
-  "newApplication": "SELECT t1.*, t2.customer_id, t2.full_name FROM t_6899ed16e9c2d32956987b9c_t AS t1 JOIN t_6899eeb2e9c2d32956987b9d_t AS t2 ON t1.application_id = t2.application_id ;",
+  "newApplication": "SELECT t1.*, t2.customer_id, t2.full_name FROM t_6899ed16e9c2d32956987b9c_t AS t1 JOIN t_6899eeb2e9c2d32956987b9d_t AS t2 ON t1.application_id = t2.application_id ORDER BY t1.submission_date DESC;",
   "applicationStatus": "SELECT t1.customer_id, t1.full_name, t2.assigned_ops_team, t3.documents_submitted, t3.verification_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899ef64e9c2d32956987b9e_t AS t3 ON t1.application_id = t3.application_id ORDER BY t1.created_at + 0 DESC;",
   "KYCRiskScreening": "SELECT t1.application_id, t1.nationality, t2.assigned_ops_team, t2.account_type, t4.risk_level, t4.checked_by, t4.review_notes, t1.customer_id, t1.full_name, t2.kyc_status, t1.created_at FROM t_6899eeb2e9c2d32956987b9d_t AS t1 LEFT JOIN t_6899ed16e9c2d32956987b9c_t AS t2 ON t1.application_id = t2.application_id LEFT JOIN t_6899f04ee9c2d32956987b9f_t AS t4 ON t1.application_id = t4.application_id ORDER BY t1.created_at + 0 DESC;",
   "complianceCheck":"SELECT a.*, b.*, FROM_UNIXTIME(a.created_at / 1000) AS created_at_readable FROM t_6899eeb2e9c2d32956987b9d_t a left JOIN t_6899f04ee9c2d32956987b9f_t b ON a.application_id = b.application_id ORDER BY a.created_at + 0 DESC;"
@@ -854,6 +854,6 @@ export const agentIds = {
   "fileRead":"0198e4f4-8bbe-7bdb-8040-864e31efe299",
   "complianceAgent":"a6491dea-d201-447d-825c-4eb7be73a692",
   "mainAgent":"38191ed6-3a48-4bc9-a2d8-153fbf2d32a1",
-  "kycAgent":"5ebd931d-83b4-459e-8e0c-edba096bc487",
+  "kycAgent":"ff0d0223-b230-4201-8cc3-a588aee6221c",
   "extractionAgent":"804990f4-e9b8-419f-9a37-2abdc9e4fd72"
 };
