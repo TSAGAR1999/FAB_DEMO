@@ -302,7 +302,7 @@ const KYCRiskScreening = () => {
             const KPIData = kpi?.data?.requiredData;
             const Icon = KPIData?.icon;
             const value = Math.round(kpi?.data?.data?.data?.[0]?.resp);
-            const progressPct = Math.min(100, (value / KPIData.target) * 100);
+            const progressPct = Math.round(Math.min(100, (value / KPIData.target) * 100));
 
             if (!KPIData) return null;
 

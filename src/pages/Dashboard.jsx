@@ -1618,6 +1618,10 @@ const Dashboard = () => {
               {/* {allKPIs.compliance.map(kpi => renderKPICard(kpi))} */}
               {ComplianceKPIs?.map(kpi => renderKPICardR(kpi.data))}
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <KYCComplaiceMaster/>
+              <SanctionsCompliance/>
+              </div>
           </div>
         </div>
       )}

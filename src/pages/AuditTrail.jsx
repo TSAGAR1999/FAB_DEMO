@@ -94,14 +94,11 @@ const AuditTrail = () => {
 
   const tableData = useQuery({
     queryKey: ['auditTrialTable'],
-    queryFn: () => PostSchema("689b1ed4e9c2d3295698807d/instances/list", {
+    queryFn: () => PostSchema("689b1ed4e9c2d3295698807d/instances/list?showDBaaSReservedKeywords=true&showReferencedData=true&showPageableMetaData=true&size=3000", {
       "dbType": "TIDB"
     })
   })
-
-  console.log(tableData,"tableData");
-  
-
+    
   const auditLogs = [
     {
       timestamp: '14:32:15',
@@ -586,7 +583,7 @@ const AuditTrail = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {!tableData.isLoading && tableData.isSuccess && tableData.data.map((log, index) => {
+                    {!tableData.isLoading && tableData.isSuccess && tableData.data.content.map((log, index) => {
                       return (
                         <tr key={index} className="hover:bg-gray-50 transition-colors">
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -596,7 +593,7 @@ const AuditTrail = () => {
                             <span className={`text-sm text-gray-600 p-2 rounded-lg ${log.decision_status=="verified"?"text-green-500 border border-green-500":log.decision_status=="not verified"?"text-red-500 border border-red-500":""}`}>{log.decision_status}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600">{log.decision_date}</span>
+                            <span className="text-sm text-gray-600">{log.piMetadata.creationTimeMS ? new Date(Number(log.piMetadata.creationTimeMS)).toLocaleDateString() : 'N/A'}</span>
                           </td>
                            <td className="px-6 py-4 whitespace-nowrap">
                             <span className="text-sm text-gray-600">{log.decision_notes}</span>

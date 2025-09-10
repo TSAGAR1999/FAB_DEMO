@@ -523,7 +523,7 @@ export const adhocQuerys = {
       icon: FileText,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
-      target: 50,
+      target: 200,
       direction: 'higher',
       progressPct: 94,
       status: 'On Track',
@@ -567,7 +567,7 @@ export const adhocQuerys = {
       KPI_Description: 'Total applications approved so far.',
       trend: {},
       tooltip: '',
-      Query: "select count(application_id) as resp from t_6899ed16e9c2d32956987b9c_t where kyc_status = 'approved';"
+      Query: "select count(application_id) as resp from t_6899ed16e9c2d32956987b9c_t where application_status = 'approved';"
     },
     {
       KPI_ID: 'applications-pending',
@@ -585,7 +585,7 @@ export const adhocQuerys = {
       KPI_Description: 'Total applications pending.',
       trend: {},
       tooltip: '',
-      Query:"select count(*) as resp from t_6899ed16e9c2d32956987b9c_t where application_status = 'pending'"
+      Query:"select count(*) as resp from t_6899ed16e9c2d32956987b9c_t WHERE application_status IN ('pending', 'In Progress')"
     }
   ],
   "KYCRiskScreening": [
@@ -646,25 +646,25 @@ export const adhocQuerys = {
       Query:
         "SELECT (SUM(CASE WHEN compliance_status = 'Clear' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_6899f04ee9c2d32956987b9f_t;"
     },
-    {
-      KPI_ID: 'Risk level distribution',
-      title: 'Risk level distribution',
-      value: null,
-      unit: '',
-      icon: ShieldCheck,
-      color: 'text-indigo-600',
-      bg: 'bg-indigo-50',
-      target: null,
-      direction: 'neutral',
-      progressPct: null,
-      status: 'TBD',
-      progressColor: 'bg-indigo-600',
-      KPI_Description: 'Breakdown of clients by assigned risk level.',
-      trend: { delta: null, period: 'WoW', direction: null },
-      tooltip: 'Use for stacked bar/pie showing Low/Medium/High proportions',
-      Query:
-        "SELECT risk_level, COUNT(*) AS resp FROM t_6899f04ee9c2d32956987b9f_t GROUP BY risk_level;"
-    },
+    // {
+    //   KPI_ID: 'Risk level distribution',
+    //   title: 'Risk level distribution',
+    //   value: null,
+    //   unit: '',
+    //   icon: ShieldCheck,
+    //   color: 'text-indigo-600',
+    //   bg: 'bg-indigo-50',
+    //   target: null,
+    //   direction: 'neutral',
+    //   progressPct: null,
+    //   status: 'TBD',
+    //   progressColor: 'bg-indigo-600',
+    //   KPI_Description: 'Breakdown of clients by assigned risk level.',
+    //   trend: { delta: null, period: 'WoW', direction: null },
+    //   tooltip: 'Use for stacked bar/pie showing Low/Medium/High proportions',
+    //   Query:
+    //     "SELECT risk_level, COUNT(*) AS resp FROM t_6899f04ee9c2d32956987b9f_t GROUP BY risk_level;"
+    // },
     {
       KPI_ID: 'Manual review rate',
       title: 'Manual review rate',
@@ -760,27 +760,27 @@ export const adhocQuerys = {
       trend: { delta: null, period: 'WoW', direction: null },
       tooltip: 'Goal: ≥98% account creation success',
       Query:
-        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
+        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t"
     },
-    {
-      KPI_ID: 'Customer notification rate',
-      title: 'Customer notification rate',
-      value: null, // <- bind to query result alias below (notification_rate_percentage)
-      unit: '%',
-      icon: Bell,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
-      target: 99, // higher is better
-      direction: 'higher',
-      progressPct: null,
-      status: 'TBD',
-      progressColor: 'bg-purple-600',
-      KPI_Description: 'Percent of customers notified of the decision.',
-      trend: { delta: null, period: 'WoW', direction: null },
-      tooltip: 'Goal: ≥99% customers notified',
-      Query:
-        "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
-    }
+    // {
+    //   KPI_ID: 'Customer notification rate',
+    //   title: 'Customer notification rate',
+    //   value: null, // <- bind to query result alias below (notification_rate_percentage)
+    //   unit: '%',
+    //   icon: Bell,
+    //   color: 'text-purple-600',
+    //   bg: 'bg-purple-50',
+    //   target: 99, // higher is better
+    //   direction: 'higher',
+    //   progressPct: null,
+    //   status: 'TBD',
+    //   progressColor: 'bg-purple-600',
+    //   KPI_Description: 'Percent of customers notified of the decision.',
+    //   trend: { delta: null, period: 'WoW', direction: null },
+    //   tooltip: 'Goal: ≥99% customers notified',
+    //   Query:
+    //     "SELECT (SUM(CASE WHEN decision_status = 'Approved' and account_created_flag = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS resp FROM t_689b1ed4e9c2d3295698807d_t WHERE decision_status = 'Approved';"
+    // }
   ],
   "ApplicationStatus": [
     {

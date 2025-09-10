@@ -73,6 +73,7 @@ export default function TaxDeclaration() {
       let allData = { ...allformsData, ...formData };
       let id = generateRandomUniqueId();
       let date = new Date().toISOString().slice(0, 10);
+      let timestamp = Date.now();
       let customer_id = uuidv4();
       const creditRiskData = {data:[{
         credit_report_id:uuidv4(),
@@ -98,7 +99,7 @@ export default function TaxDeclaration() {
             customer_id,
             application_id: id,
             emirates_id: allData.emiratesIDNo,
-            created_at: `${Date.now()}`,
+            created_at: `${timestamp}`,
           },
         ],
       };
@@ -110,8 +111,8 @@ export default function TaxDeclaration() {
             assigned_ops_team: teams[randomIndex],
             application_status: "In Progress",
             application_id: id,
-            submission_date: `${Date.now()}`,
-            sla_due_date: `${Date.now()}`,
+            submission_date: `${timestamp}`,
+            sla_due_date: `${timestamp}`,
             kyc_status: allData.kyc_status,
             branch_code: allData.nearestFabBranch
 
@@ -143,7 +144,7 @@ export default function TaxDeclaration() {
 
       let endTime = performance.now();
 
-      let kycRes = JSON.parse(kycoutput.usedTools[1].toolOutput);
+      let kycRes = JSON.parse(kycoutput.usedTools.filter(data=>data.tool=="PI_Entity_Ingestion")[0].toolOutput);
 
       let kycConsole = {
         ...AgentConsolepayload,
@@ -165,14 +166,14 @@ export default function TaxDeclaration() {
         agentId: agentIds.complianceAgent,
         query: complaincequery,
       };
-
+      
       startTime = performance.now();
 
       let complainceoutput = await PostInteractive("interact", complaincepayload);
 
       endTime = performance.now();
 
-      complainceoutput = JSON.parse(complainceoutput.usedTools[1].toolOutput);
+      let complainceres = JSON.parse(complainceoutput.usedTools[0].toolOutput);
 
       let complainceConsole = {
         ...AgentConsolepayload,
@@ -181,13 +182,17 @@ export default function TaxDeclaration() {
         agent_id: agentIds.complianceAgent,
         lastused: new Date().toISOString(),
         response_time: ((endTime - startTime)/1000).toFixed(2),
-        activity_log: complainceoutput.retrbidy.data[0].activity_log,
+        activity_log: complainceres.retrbidy.data[0].activity_log,
         status: "Active"
       }
 
       await PostSchema(`${SchemaId.AgentConsole}/instances`, {data:[{...complainceConsole}]});
 
-      let finaldecisionquery = `Kyc status is verified and complaiance status is clear and 'companies': [ 'Bright Future Technologies LLC', 'Desert Star Trading FZE', 'Oasis Hospitality Group', 'Skyline Construction LLC', 'EmirTech Solutions', 'Golden Sands Finance', 'Pearl Marine Services', 'Falcon Aviation Services', 'Blue Horizon Media', 'Sunrise Retail Group' ] } give me verifed or not verifed? and application_id is '${id}' and decision_id is ${uuidv4()}`;
+      let updatedKYC = JSON.parse(kycoutput.filter(data=>data.tool==="Update_instances")[0].toolOutput);
+
+      let updatedComplaince = JSON.parse(complainceoutput.filter(data=>data.toolInput.schemaId=="6899f04ee9c2d32956987b9f")[0].toolOutput)
+
+      let finaldecisionquery = `Kyc status is ${updatedKYC.retrbidy.data.kyc_status} and complaiance status is ${updatedComplaince.retrbidy.data[0].compliance_status} and 'companies': [ 'Bright Future Technologies LLC', 'Desert Star Trading FZE', 'Oasis Hospitality Group', 'Skyline Construction LLC', 'EmirTech Solutions', 'Golden Sands Finance', 'Pearl Marine Services', 'Falcon Aviation Services', 'Blue Horizon Media', 'Sunrise Retail Group' ] } give me verifed or not verifed? and application_id is '${id}' and decision_id is ${uuidv4()}`;
       
       let finaldecisionlogpayload = {
         ...interactivepayload,
@@ -209,6 +214,7 @@ export default function TaxDeclaration() {
       // });
     } catch (error) {
       toast.error(error.message);
+      console.log(error.message);
       setLoading(false);
       navigate("/dashboard");
     }

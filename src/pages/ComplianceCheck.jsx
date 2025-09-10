@@ -8,6 +8,7 @@ import { adhocQuerys, tableQueries } from '../Constants';
 import KPISkeleton from './KPISkeleton';
 import { useQuery } from '@tanstack/react-query';
 import { postGetKPIData } from '../API/BqsApi';
+import RiskLevelChart from './RiskLevelChart';
 const ComplianceCheck = () => {
   const [showClientModal, setShowClientModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -403,6 +404,10 @@ const ComplianceCheck = () => {
             );
           })
         )}
+      </div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-4'>
+        <RiskLevelChart/>
       </div>
 
 
