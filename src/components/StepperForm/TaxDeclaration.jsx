@@ -188,9 +188,9 @@ export default function TaxDeclaration() {
 
       await PostSchema(`${SchemaId.AgentConsole}/instances`, {data:[{...complainceConsole}]});
 
-      let updatedKYC = JSON.parse(kycoutput.filter(data=>data.tool==="Update_instances")[0].toolOutput);
+      let updatedKYC = JSON.parse(kycoutput.usedTools.filter(data=>data.tool==="Update_instances")[0].toolOutput);
 
-      let updatedComplaince = JSON.parse(complainceoutput.filter(data=>data.toolInput.schemaId=="6899f04ee9c2d32956987b9f")[0].toolOutput)
+      let updatedComplaince = JSON.parse(complainceoutput.usedTools.filter(data=>data.toolInput.schemaId=="6899f04ee9c2d32956987b9f")[0].toolOutput)
 
       let finaldecisionquery = `Kyc status is ${updatedKYC.retrbidy.data.kyc_status} and complaiance status is ${updatedComplaince.retrbidy.data[0].compliance_status} and 'companies': [ 'Bright Future Technologies LLC', 'Desert Star Trading FZE', 'Oasis Hospitality Group', 'Skyline Construction LLC', 'EmirTech Solutions', 'Golden Sands Finance', 'Pearl Marine Services', 'Falcon Aviation Services', 'Blue Horizon Media', 'Sunrise Retail Group' ] } give me verifed or not verifed? and application_id is '${id}' and decision_id is ${uuidv4()}`;
       
@@ -203,6 +203,7 @@ export default function TaxDeclaration() {
     ]
       };
       await PostInteractive("interact", finaldecisionlogpayload);
+      toast.success("Form submitted successfully");
       navigate("/dashboard");
       setLoading(false);
       // PostSchema(`${SchemaId.MasterSchema}/instpersonal-banking/new-applicationances`, reqData).then((data) => {
